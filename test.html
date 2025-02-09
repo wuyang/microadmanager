@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ad Manager Test Page</title>
+    <style>
+        #ad-container {
+            width: 300px;
+            height: 250px;
+            border: 1px solid #ccc;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Ad Manager Test Page</h1>
+    <button onclick="requestAd()">Load Ad</button>
+    <div id="ad-container">Click to Load Ad</div>
+
+    <script>
+        const serverUrl = "http://127.0.0.1:5000";
+        const adContainer = document.getElementById("ad-container");
+
+        // Function to request an ad
+        function requestAd() {
+            fetch(`${serverUrl}/getAd`)
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data)
+                    if (data.adImage && data.adUrl) {
+                        // Display the ad
+                        adContainer.innerHTML = `<img id="ad-image" src="${data.adImage}" width="300" height="250" alt="Ad">`;
+                        
+                        // Set up click tracking
+                        document.getElementById("ad-image").addEventListener("click", function () {
+                            sendClickEvent(data.adId);
+                            window.open(data.adUrl, "_blank"); // Open ad link
+                        });
+                    }
+                })
+                .catch(error => console.error("Error loading ad:", error));
+        }
+
+        // Function to send click event
+        function sendClickEvent(adId) {
+            fetch(`${serverUrl}/recordClick`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ adId, timestamp: new Date().toISOString() })
+            })
+            .then(response => response.json())
+            .then(data => console.log("Click recorded:", data))
+            .catch(error => console.error("Error sending click:", error));
+        }
+    </script>
+
+</body>
+</html>

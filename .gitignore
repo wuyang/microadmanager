@@ -1,0 +1,33 @@
+# Byte-compiled / Cached files
+__pycache__/
+*.py[cod]
+*.sqlite-journal
+
+# Virtual environment
+venv/
+env/
+*.venv
+*.env
+
+# SQLite database files
+*.db
+*.sqlite3
+
+# Logs & Debug files
+logs/
+*.log
+debug.log
+
+# VS Code settings
+.vscode/
+
+# System files (Mac/Linux/Windows)
+.DS_Store
+Thumbs.db
+
+# Python dependency files
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Ignore environment variable files (if used)
+.env
